@@ -75,3 +75,57 @@ Running 5s test @ http://laravel.test
 Requests/sec:     12.43
 Transfer/sec:      0.86MB
 ```
+
+# PHP 82
+
+`php artisan module:make one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twentyone twentytwo twenty-three twenty-four twenty-five twenty-six twenty-seven twenty-eight twenty-nine thirty thirty-one thirty-two thirty-three thirty-four thirty-five thirty-six thirty-seven thirty-eight thirty-nine forty forty-one forty-two forty-three forty-four forty-five forty-six forty-seven forty-eight forty-nine fifty fifty-one fifty-two fifty-three fifty-four fifty-five fifty-six fifty-seven fifty-eight fifty-nine sixty sixty-one sixty-two sixty-three sixty-four sixty-five sixty-six sixty-seven sixty-eight sixty-nine seventy seventy-one seventy-two seventy-three seventy-four seventy-five seventy-six seventy-seven seventy-eight seventy-nine eighty eighty-one eighty-two eighty-three eighty-four eighty-five eighty-six eighty-seven eighty-eight eighty-nine ninety ninety-one ninety-two ninety-three ninety-four ninety-five ninety-six ninety-seven ninety-eight ninety-nine one-hundred`
+
+```bash
+# blank project with nwidart modules installed
+➜  ~ wrk -t12 -c400 -d5s http://laravel.test
+Running 5s test @ http://laravel.test
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   406.69ms  240.64ms   1.90s    84.54%
+    Req/Sec    88.11     58.96   240.00     61.20%
+  4770 requests in 5.04s, 332.38MB read
+  Socket errors: connect 0, read 0, write 0, timeout 28
+  Non-2xx or 3xx responses: 7
+Requests/sec:    946.43
+Transfer/sec:     65.95MB
+
+# 100 plain modules
+➜  ~ wrk -t12 -c400 -d5s http://laravel.test
+Running 5s test @ http://laravel.test
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   403.59ms   92.68ms 736.69ms   84.42%
+    Req/Sec    79.97     48.60   470.00     68.80%
+  4742 requests in 5.09s, 325.98MB read
+Requests/sec:    932.33
+Transfer/sec:     64.09MB
+
+# 100 API modules
+➜  ~ wrk -t12 -c400 -d5s http://laravel.test
+Running 5s test @ http://laravel.test
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.58s   225.42ms   1.99s    64.71%
+    Req/Sec    13.00     10.42    40.00     67.74%
+  58 requests in 5.09s, 3.98MB read
+  Socket errors: connect 0, read 0, write 0, timeout 41
+Requests/sec:     11.40
+Transfer/sec:    801.31KB
+# Generated optimized autoload files containing 6504 classes
+
+# 100 disabled normal modules
+➜  ~ wrk -t12 -c400 -d10s http://laravel.test
+Running 10s test @ http://laravel.test
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   401.20ms  100.45ms   1.03s    87.71%
+    Req/Sec    81.01     37.69   290.00     73.80%
+  9680 requests in 10.10s, 665.44MB read
+Requests/sec:    958.53
+Transfer/sec:     65.89MB
+```
