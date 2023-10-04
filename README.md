@@ -74,6 +74,29 @@ Running 5s test @ http://laravel.test
   Socket errors: connect 0, read 0, write 0, timeout 45
 Requests/sec:     12.43
 Transfer/sec:      0.86MB
+
+# after cache in swoole, note: CPU usage was WAY lower (7%)
+Running 30s test @ http://laravel.test:8000
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   341.11ms  564.15ms   1.92s    86.53%
+    Req/Sec    16.62    122.00     2.72k    99.55%
+  3268 requests in 30.09s, 181.18MB read
+  Socket errors: connect 0, read 0, write 0, timeout 2533
+Requests/sec:    108.61
+Transfer/sec:      6.02MB
+
+# swoole without cache
+➜  laravel git:(main) ✗ wrk -t12 -c400 -d30s http://laravel.test:8000
+Running 30s test @ http://laravel.test:8000
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   273.13ms  494.40ms   1.74s    86.59%
+    Req/Sec    15.67     75.31     1.23k    98.61%
+  3242 requests in 30.10s, 179.51MB read
+  Socket errors: connect 0, read 0, write 0, timeout 2556
+Requests/sec:    107.72
+Transfer/sec:      5.96MB
 ```
 
 # PHP 82
@@ -154,27 +177,4 @@ Running 30s test @ http://laravel.test
   Socket errors: connect 0, read 0, write 0, timeout 607
 Requests/sec:     20.87
 Transfer/sec:      1.44MB
-
-# after cache in swoole, note: CPU usage was WAY lower (7%)
-Running 30s test @ http://laravel.test:8000
-  12 threads and 400 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   341.11ms  564.15ms   1.92s    86.53%
-    Req/Sec    16.62    122.00     2.72k    99.55%
-  3268 requests in 30.09s, 181.18MB read
-  Socket errors: connect 0, read 0, write 0, timeout 2533
-Requests/sec:    108.61
-Transfer/sec:      6.02MB
-
-# swoole without cache
-➜  laravel git:(main) ✗ wrk -t12 -c400 -d30s http://laravel.test:8000
-Running 30s test @ http://laravel.test:8000
-  12 threads and 400 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   273.13ms  494.40ms   1.74s    86.59%
-    Req/Sec    15.67     75.31     1.23k    98.61%
-  3242 requests in 30.10s, 179.51MB read
-  Socket errors: connect 0, read 0, write 0, timeout 2556
-Requests/sec:    107.72
-Transfer/sec:      5.96MB
 ```
