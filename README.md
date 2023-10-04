@@ -128,4 +128,53 @@ Running 10s test @ http://laravel.test
   9680 requests in 10.10s, 665.44MB read
 Requests/sec:    958.53
 Transfer/sec:     65.89MB
+
+# Caching routes
+
+# 211 routes
+➜  laravel git:(main) ✗ wrk -t12 -c400 -d30s http://laravel.test
+Running 30s test @ http://laravel.test
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.00us    0.00us   0.00us    -nan%
+    Req/Sec     4.48      6.04    30.00     94.44%
+  106 requests in 30.10s, 7.30MB read
+  Socket errors: connect 0, read 0, write 0, timeout 106
+Requests/sec:      3.52
+Transfer/sec:    248.29KB
+
+# after php artisan route:cache
+➜  laravel git:(main) ✗ wrk -t12 -c400 -d30s http://laravel.test
+Running 30s test @ http://laravel.test
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.07s   424.97ms   1.96s    80.00%
+    Req/Sec     7.66      7.45    70.00     81.67%
+  627 requests in 30.04s, 43.21MB read
+  Socket errors: connect 0, read 0, write 0, timeout 607
+Requests/sec:     20.87
+Transfer/sec:      1.44MB
+
+# after cache in swoole, note: CPU usage was WAY lower (7%)
+Running 30s test @ http://laravel.test:8000
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   341.11ms  564.15ms   1.92s    86.53%
+    Req/Sec    16.62    122.00     2.72k    99.55%
+  3268 requests in 30.09s, 181.18MB read
+  Socket errors: connect 0, read 0, write 0, timeout 2533
+Requests/sec:    108.61
+Transfer/sec:      6.02MB
+
+# swoole without cache
+➜  laravel git:(main) ✗ wrk -t12 -c400 -d30s http://laravel.test:8000
+Running 30s test @ http://laravel.test:8000
+  12 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   273.13ms  494.40ms   1.74s    86.59%
+    Req/Sec    15.67     75.31     1.23k    98.61%
+  3242 requests in 30.10s, 179.51MB read
+  Socket errors: connect 0, read 0, write 0, timeout 2556
+Requests/sec:    107.72
+Transfer/sec:      5.96MB
 ```
